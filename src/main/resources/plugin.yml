@@ -1,0 +1,11 @@
+name: Hologram
+version: '${version}'
+main: hologram.Hologram
+api-version: 1.19
+authors: [ adomas ]
+description: realistic hologram in minecraft from images
+commands:
+  spawnhologram:
+    description: spawn a hologram
+  despawnhologram:
+    description: despawn a hologram
