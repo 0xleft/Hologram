@@ -46,7 +46,7 @@ public class SpawnedObject {
 
     private void spawnObject() {
 
-        double scale = (double) Hologram.getDataHandler().gethologramInfo().get("scale");
+        double scale = (double) Hologram.getDataHandler().getHologramInfoValueFloat("scale");
 
         for (Vector3 color : loadedObject.getFaceIndexToColor().keySet()) {
 
@@ -82,10 +82,10 @@ public class SpawnedObject {
                                 if (!alreadyPlacedBlockLocations.contains(faceLocationInWorld)) {
                                     alreadyPlacedBlockLocations.add(faceLocationInWorld);
 
-                                    // TODO the most performance intence task is the line bellow
+                                    // TODO the most performance intence task is the line bellow because you have to loop over all the colors
                                     Material material = Utils.blockFromColor((int) Math.round(color.getX()*255), (int) Math.round(color.getY()*255), (int) Math.round(color.getZ()*255));
-                                    Block block = faceLocationInWorld.getBlock();
 
+                                    Block block = faceLocationInWorld.getBlock();
                                     block.setType(material);
                                     spawnedBlocks.add(block);
                                 }

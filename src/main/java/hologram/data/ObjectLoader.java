@@ -3,8 +3,6 @@ package hologram.data;
 import hologram.Hologram;
 import hologram.utils.Vector3;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
 import java.util.*;

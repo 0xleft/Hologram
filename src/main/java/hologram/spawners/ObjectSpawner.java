@@ -3,13 +3,9 @@ package hologram.spawners;
 import hologram.Hologram;
 import hologram.data.LoadedObject;
 import hologram.data.SpawnedObject;
-import hologram.utils.Vector3;
 import org.bukkit.*;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class ObjectSpawner {
