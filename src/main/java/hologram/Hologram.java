@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public final class Hologram extends JavaPlugin {
 
-
     private static Hologram instance;
     private static DataHandler dataHandler;
     private static ObjectLoader objectLoader;

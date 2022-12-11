@@ -68,6 +68,25 @@ public class Vector3 {
         return vector;
     }
 
+    public double magnitude3D() {
+        return Math.sqrt(this.vector3.get(0) * vector3.get(0) + vector3.get(1) * vector3.get(1) + vector3.get(2) * vector3.get(2));
+    }
+
+    public Vector3 norm() {
+        return new Vector3(
+                vector3.get(0) / magnitude3D(),
+                vector3.get(1) / magnitude3D(),
+                vector3.get(2) / magnitude3D()
+        );
+    }
+
+    public Vector3 round() {
+        return new Vector3(
+                (double) Math.round(this.vector3.get(0)),
+                (double) Math.round(this.vector3.get(1)),
+                (double) Math.round(this.vector3.get(2)));
+    }
+
     public double getX() {
         return this.vector3.get(0);
     }

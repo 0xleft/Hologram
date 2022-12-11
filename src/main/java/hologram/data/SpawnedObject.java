@@ -44,9 +44,10 @@ public class SpawnedObject {
         return loadedObject;
     }
 
+    // spawns object blocks and also their color
     private void spawnObject() {
 
-        double scale = (double) Hologram.getDataHandler().getHologramInfoValueFloat("scale");
+        double scale = (double) Hologram.getDataHandler().getConfigValueFloat("scale");
 
         for (Vector3 color : loadedObject.getFaceIndexToColor().keySet()) {
 
@@ -76,28 +77,41 @@ public class SpawnedObject {
                                 , Math.round(location.getY() + middlePoint.getY()*scale)
                                 , Math.round(location.getZ() + middlePoint.getZ()*scale));
 
+                        ArrayList<Location> locationsForBlocks = new ArrayList<>();
+
+                        locationsForBlocks.add(faceLocationInWorld);
+
+                        vertexes.add(middlePoint);
+
+                        // convert from vector 3 to locations
+                        Utils.getPointsInsidePolygon(vertexes).forEach(vector3 -> locationsForBlocks.add(new Location(world,
+                                location.getX() + vector3.getX()*scale,
+                                location.getY() + vector3.getY()*scale,
+                                location.getZ() + vector3.getZ()*scale
+                        )));
+
+
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (!alreadyPlacedBlockLocations.contains(faceLocationInWorld)) {
-                                    alreadyPlacedBlockLocations.add(faceLocationInWorld);
+                                for (Location blockLocationInTheWorld : locationsForBlocks) {
+                                    if (!alreadyPlacedBlockLocations.contains(blockLocationInTheWorld)) {
+                                        alreadyPlacedBlockLocations.add(blockLocationInTheWorld);
 
-                                    // TODO the most performance intence task is the line bellow because you have to loop over all the colors
-                                    Material material = Utils.blockFromColor((int) Math.round(color.getX()*255), (int) Math.round(color.getY()*255), (int) Math.round(color.getZ()*255));
+                                        // TODO the most performance intence task is the line bellow because you have to loop over all the colors
+                                        Material material = Utils.blockFromColor((int) Math.round(color.getX()*255), (int) Math.round(color.getY()*255), (int) Math.round(color.getZ()*255));
 
-                                    Block block = faceLocationInWorld.getBlock();
-                                    block.setType(material);
-                                    spawnedBlocks.add(block);
+                                        Block block = blockLocationInTheWorld.getBlock();
+                                        block.setType(material);
+                                        spawnedBlocks.add(block);
+                                    }
                                 }
                             }
                         }.runTask(Hologram.getInstance());
                     }
                 }
             }.runTask(Hologram.getInstance());
-
         }
-
-        Bukkit.getLogger().info(ChatColor.AQUA+"Spawned "+id+" with "+spawnedBlocks.size()+" blocks.");
     }
 
     public void removeObject() {

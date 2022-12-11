@@ -21,8 +21,11 @@ public class DataHandler {
     }
 
     private static DataHandler ourInstance;
-    private File hologramInfoFile;
-    private FileConfiguration hologramInfo;
+    private File configFile;
+    private FileConfiguration config;
+    private File saveFile;
+    private FileConfiguration saveConfiguration;
+
 
     static {
         try {
@@ -40,25 +43,50 @@ public class DataHandler {
         if (!Hologram.getInstance().getDataFolder().exists()){
             new File(Hologram.getInstance().getDataFolder().toURI()).mkdir();
         }
-        this.hologramInfoFile = new File(Hologram.getInstance().getDataFolder(), "hologram.yml");
 
-        if (!this.hologramInfoFile.exists()) {
+        // initialize usefull files
+        initConfigFile();
+        initSaveFile();
+    }
+
+    private void initConfigFile() {
+        this.configFile = new File(Hologram.getInstance().getDataFolder(), "config.yml");
+
+        if (!this.configFile.exists()) {
             try {
-                this.hologramInfoFile.createNewFile();
+                this.configFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            this.hologramInfo = YamlConfiguration.loadConfiguration(this.hologramInfoFile);
+            this.config = YamlConfiguration.loadConfiguration(this.configFile);
 
             initDefaults();
             return;
         }
-        this.hologramInfo = YamlConfiguration.loadConfiguration(this.hologramInfoFile);
+        this.config = YamlConfiguration.loadConfiguration(this.configFile);
     }
 
-    public FileConfiguration gethologramInfo() {
-        return hologramInfo;
+    private void initSaveFile() {
+
+
+        this.saveFile = new File(Hologram.getInstance().getDataFolder(), "config.yml");
+
+        if (!this.saveFile.exists()) {
+            try {
+                this.saveFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        this.saveConfiguration = YamlConfiguration.loadConfiguration(this.saveFile);
+    }
+
+    // TODO make loading for save file and make saving for spawned objects objects.
+
+    private FileConfiguration getconfig() {
+        return config;
     }
 
     private void initDefaults() {
@@ -67,27 +95,28 @@ public class DataHandler {
         Bukkit.getLogger().info("Loaded defaults for: "+defaults.keySet());
 
         for (String key : defaults.keySet()) {
-            sethologramInfo(key, defaults.get(key));
+            setConfig(key, defaults.get(key));
         }
     }
 
-    public void savehologramInfo() {
+    public void saveConfig() {
+
         try {
-            this.hologramInfo.save(this.hologramInfoFile);
+            this.config.save(this.configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void sethologramInfo(String name, Object value) {
-        hologramInfo.set(name, value);
-        savehologramInfo();
+    public void setConfig(String name, Object value) {
+        config.set(name, value);
+        saveConfig();
     }
 
-    public String getHologramInfoValueString(String path) {
+    public String getconfigValueString(String path) {
         String temp;
         try {
-            temp = (String) hologramInfo.get(path);
+            temp = (String) config.get(path);
         } catch (NullPointerException e ){
             throw new RuntimeException("Cannot get string value");
         }
@@ -95,10 +124,10 @@ public class DataHandler {
         return temp;
     }
 
-    public boolean getHologramInfoValueBoolean(String path) {
+    public boolean getConfigValueBoolean(String path) {
         boolean temp;
         try {
-            temp = (Boolean) hologramInfo.get(path);
+            temp = (Boolean) config.get(path);
         } catch (NullPointerException e ){
             throw new RuntimeException("Cannot get boolean value");
         }
@@ -106,10 +135,10 @@ public class DataHandler {
         return temp;
     }
 
-    public Float getHologramInfoValueFloat(String path) {
+    public Float getConfigValueFloat(String path) {
         Float temp;
         try {
-            temp = (Float) hologramInfo.get(path);
+            temp = Float.parseFloat((String) config.get(path));
         } catch (NullPointerException e ){
             throw new RuntimeException("Cannot get float value");
         }
